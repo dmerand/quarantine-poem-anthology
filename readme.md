@@ -1,5 +1,12 @@
 A simple Sinatra app using Airtable as the back-end for an anthology of poems.
 
+It's essentially a nicer public front-end to an Airtable, which gives you some extra features:
+
+- Public-shareable nicely-formatted site, with a small group of contributors that can be easily managed via Airtable.
+- Searchability with regex, including custom search by (in this case) Author or Submitter.
+- Automatic RSS feed, so that people can subscribe in [proper internet newsreaders](https://github.com/newsboat/newsboat).
+- Permalinks per row (per poem in this case).
+
 My version is deployed to <https://quarantine-poem-anthology.herokuapp.com/>.
 
 # Setup and Deployment
