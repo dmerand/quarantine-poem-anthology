@@ -4,13 +4,34 @@ require 'airrecord'
 require 'kramdown'
 require 'sinatra'
 
-Row = Struct.new(:title, :author, :text, :image, :submitted, :created) do
+Row = Struct.new(:id, :title, :author, :text, :image, :submitted, :created) do
   def inspect
     to_h.to_s
   end
 
+  def image_to_html
+    if image.nil?
+      ""
+    else
+      <<~IMG
+        <img src="#{image[0]['url']}">
+      IMG
+    end
+  end
+
   def text_to_html
-    Kramdown::Document.new(text.gsub("\n", "<br>")).to_html
+    if text.nil?
+      ""
+    else
+      Kramdown::Document.new(text.gsub("\n", "<br>")).to_html
+    end
+  end
+
+  def to_html
+    <<~HTML
+      #{text_to_html if text}#{"<br><br>" if text}
+      #{image_to_html if image}
+    HTML
   end
 end
 
@@ -33,6 +54,7 @@ class App < Sinatra::Base
       rows = []
       poem.all.each do |row|
         rows << Row.new(
+          row.id,
           row['Title'],
           row['Author'],
           row['Text'],
@@ -59,6 +81,35 @@ class App < Sinatra::Base
   get "/" do
     @rows = settings.rows
     erb :index
+  end
+
+  get "/poems/:id" do
+    @rows = settings.rows.filter {|row| row.id.match? params[:id]}
+    erb :index
+  end
+
+  get "/rss.xml" do
+    @rows = settings.rows
+    builder do |xml|
+      xml.instruct! :xml, :version => '1.0'
+      xml.rss :version => "2.0" do
+        xml.channel do
+          xml.title @title
+          xml.description ""
+          xml.link ENV["SITE_URL"]
+
+          @rows.each do |row|
+            xml.item do
+              xml.title row.title
+              xml.description row.to_html
+              xml.link "#{ENV['SITE_URL']}/poems/#{row['id']}"
+              xml.pubDate Time.parse(row.created.to_s).rfc822()
+              xml.guid "#{ENV['SITE_URL']}/poems/#{row['id']}"
+            end
+          end
+        end
+      end
+    end
   end
 
   get "/refresh" do

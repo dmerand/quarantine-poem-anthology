@@ -29,8 +29,8 @@
 
     <form action="/search" method="get" class="flex-ns">
       <input name="q" id="q" value="<%= @search %>" type="text" class="mw5 input-reset br2 ba b--black-20 pa2 mb2 db w-100">
-      <input type="submit" value="search" class="ml2-ns link dim br2 ba bw1 b--gold ph3 pv2 mb2 dib bg-yellow avenir dark-green pointer">
-      <a href="/" class="ml2 link dim br2 ba bw1 b--gold ph3 pv2 mb2 dib bg-yellow avenir dark-green pointer">show all</a>
+      <input type="submit" value="search" class="ml2-ns bg-washed-yellow f6 link dim ba b--black ph3 pv2 mb2 dib black pointer">
+      <a href="/" class="ml2 f6 link dim ba b--black ph3 pv2 mb2 dib black">show all</a>
       </input>
     </form>
 
@@ -44,7 +44,11 @@
       <% @rows.each do |row| %>
         <% unless row.nil? %>
           <dt class="flex-ns justify-between-ns mt5 lh-title f4 f3-ns fw7">
-            <div><%= row.title %></div>
+            <div>
+              <a href="/poems/<%= row.id %>" class="link black">
+                <%= row.title %>
+              </a>
+            </div>
             <% unless row.submitted.nil? %>
               <div>
                 <div class="f6 silver pointer" onClick="updateSearch(this, 'from: ')">
@@ -62,14 +66,9 @@
                 <%= row.author %>
               </div>
             <% end %>
-            <% unless row.text.nil? %>
+            <% unless row.text.nil? && row.image.nil? %>
               <div class="mt2">
-                <%= row.text_to_html %>
-              </div>
-            <% end %>
-            <% unless row.image.nil? %>
-              <div class="mt2">
-                <img src="<%= row.image[0]['url'] %>">
+                <%= row.to_html %>
               </div>
             <% end %>
           </dd>
