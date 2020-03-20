@@ -69,19 +69,24 @@ class App < Sinatra::Base
   get "/search" do
     @search = params['q']
     case @search
-    when /^from: */
+    when /^from: */i
       # submitter search
       pattern = Regexp.new(@search.sub(/from: */i, ''), Regexp::IGNORECASE)
       @rows = settings.rows.filter do |row|
-        !row.nil? && pattern.match?(row.submitted)
+        pattern.match?(row.submitted)
+      end
+    when /^by: */i
+      # author search
+      pattern = Regexp.new(@search.sub(/by: */i, ''), Regexp::IGNORECASE)
+      @rows = settings.rows.filter do |row|
+        pattern.match?(row.author)
       end
     else
       pattern = Regexp.new(@search, Regexp::IGNORECASE)
       @rows = settings.rows.filter do |row|
-        !row.nil? && (
-          pattern.match?(row.title) ||
-          pattern.match?(row.text)
-        )
+        pattern.match?(row.title) ||
+        pattern.match?(row.text) ||
+        pattern.match?(row.author)
       end
     end
     erb :index

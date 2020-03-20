@@ -47,7 +47,7 @@
             <div><%= row.title %></div>
             <% unless row.submitted.nil? %>
               <div>
-                <div class="mt2 f6 silver pointer" onClick="updateSearch(this, 'from: ')">
+                <div class="f6 silver pointer" onClick="updateSearch(this, 'from: ')">
                   <%= row.submitted %>
                 </div>
                 <div class="f7 silver">
@@ -58,7 +58,7 @@
           </dt>
           <dd class="ml0 flex flex-column">
             <% unless row.author.nil? %>
-              <div class="mt2">
+              <div class="mt2 f5 f4-ns pointer" onClick="updateSearch(this, 'by: ')">
                 <%= row.author %>
               </div>
             <% end %>
