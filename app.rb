@@ -14,7 +14,7 @@ Row = Struct.new(:id, :title, :author, :text, :image, :submitted, :created) do
       ""
     else
       <<~IMG
-        <img src="#{image[0]['url']}">
+        <img src="#{image[0]['url']}" alt="#{title} by #{author}">
       IMG
     end
   end
