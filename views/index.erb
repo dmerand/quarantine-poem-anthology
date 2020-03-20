@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" class="w-100">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="author" content="Donald Merand">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="/css/tachyons.min.css" type="text/css" media="all">
+
+  <title><%= @title %></title>
+
+  <script>
+    function jump(el, offset = 0) {
+      window.scrollTo(0, el.offsetTop - 0);
+    }
+    function updateSearch(el, prefix) {
+      const search = document.getElementById('q');
+      search.value = `${prefix}${el.innerHTML.trim()}`;
+      search.select();
+      jump(document.body);
+    }
+  </script>
+</head>
+<body class="w-100 baskerville f5 fw5 black bg-washed-yellow">
+  <section class="w-100 center pl3 pr3 pt2-ns pb4-ns pl4-ns pr4-ns" style="max-width: 50rem;">
+
+    <h1 class="mt3 mt5-l mt4-ns mb3 mb4-ns f2 f1-ns fw5"><%= @title %></h1>
+
+    <form action="/search" method="get" class="flex-ns">
+      <input name="q" id="q" value="<%= @search %>" type="text" class="mw5 input-reset br2 ba b--black-20 pa2 mb2 db w-100">
+      <input type="submit" value="search" class="ml2-ns link dim br2 ba bw1 b--gold ph3 pv2 mb2 dib bg-yellow avenir dark-green pointer">
+      <a href="/" class="ml2 link dim br2 ba bw1 b--gold ph3 pv2 mb2 dib bg-yellow avenir dark-green pointer">show all</a>
+      </input>
+    </form>
+
+    <% unless @search.nil? %>
+      <div>
+        <%= @rows.count %> match<%= @rows.count > 1 ? "es" : "" %> for <span class="i">"<%= @search %>"</span>
+      </div>
+    <% end %>
+
+    <dl>
+      <% @rows.each do |row| %>
+        <% unless row.nil? %>
+          <dt class="flex-ns justify-between-ns mt5 lh-title f4 f3-ns fw7">
+            <div><%= row.title %></div>
+            <% unless row.submitted.nil? %>
+              <div>
+                <div class="mt2 f6 silver pointer" onClick="updateSearch(this, 'from: ')">
+                  <%= row.submitted %>
+                </div>
+                <div class="f7 silver">
+                  <%= row.created %>
+                </div>
+              </div>
+            <% end %>
+          </dt>
+          <dd class="ml0 flex flex-column">
+            <% unless row.author.nil? %>
+              <div class="mt2">
+                <%= row.author %>
+              </div>
+            <% end %>
+            <% unless row.text.nil? %>
+              <div class="mt2">
+                <%= row.text_to_html %>
+              </div>
+            <% end %>
+            <% unless row.image.nil? %>
+              <div class="mt2">
+                <img src="<%= row.image[0]['url'] %>">
+              </div>
+            <% end %>
+          </dd>
+        <% end %>
+      <% end %>
+    </dl>
+
+    <footer class="mt5 pt5 mb3 center f6 lh-title">
+      <div>
+        click on a 
+        <span class="silver fw7">
+          Person's Name 
+        </span>
+        to search for submissions by that person.
+      </div>
+      <div>
+        share or save a particular search by copying the URL after searching.
+      </div>
+      <div class="mt2">
+        <span>email</span>
+        <script type="text/javascript" language="javascript">
+        <!--
+        // Email obfuscator script 2.1 by Tim Williams, University of Arizona
+        // Random encryption key feature coded by Andrew Moulden
+        // This code is freeware provided these four comment lines remain intact
+        // A wizard to generate this code is at http://www.jottings.com/obfuscator/
+        { 
+          coded = "iqMXzi@RveXMi.qeS"
+          key = "wV1gyfxlBCKrj4F7LacZSoJEzsIbe568umXPGdqnUhtpHvk9D2ROYAiTMW03QN"
+          shift=coded.length
+          link=""
+          for (i=0; i<coded.length; i++) {
+            if (key.indexOf(coded.charAt(i))==-1) {
+              ltr = coded.charAt(i)
+              link += (ltr)
+            }
+            else {     
+              ltr = (key.indexOf(coded.charAt(i))-shift+key.length) % key.length
+              link += (key.charAt(ltr))
+            }
+          }
+          document.write(`<a href="mailto:${link}" class="link dim underline-hover dark-green">${link}</a>`)
+        }
+        //-->
+        </script>
+        <span> with submissions.</span>
+        <a href="/refresh" class="link dim underline-hover dark-green">[refresh database]</a>
+      </div>
+    </footer>
+
+  </section>
+</body>
+</html>
