@@ -23,7 +23,7 @@
   </script>
 </head>
 <body class="w-100 baskerville f5 fw5 black bg-washed-yellow">
-  <section class="w-100 center pl3 pr3 pt2-ns pb4-ns pl4-ns pr4-ns" style="max-width: 50rem;">
+  <section class="w-100 center pa3 " style="max-width: 50rem;">
 
     <h1 class="mt3 mt5-l mt4-ns mb3 mb4-ns f2 f1-ns fw5"><%= @title %></h1>
 
@@ -43,7 +43,7 @@
     <dl>
       <% @rows.each do |row| %>
         <% unless row.nil? %>
-          <dt class="flex-ns justify-between-ns mt5 lh-title f4 f3-ns fw7">
+          <dt class="flex-ns justify-between-ns pt5 lh-title f4 f3-ns fw7">
             <div>
               <a href="/poems/<%= row.id %>" class="link black">
                 <%= row.title %>
@@ -60,7 +60,7 @@
               </div>
             <% end %>
           </dt>
-          <dd class="ml0 flex flex-column">
+          <dd class="ml0 mb5 flex flex-column">
             <% unless row.author.nil? %>
               <div class="mt2 f5 f4-ns pointer" onClick="updateSearch(this, 'by: ')">
                 <%= row.author %>
@@ -76,7 +76,10 @@
       <% end %>
     </dl>
 
-    <footer class="mt5 pt5 mb3 center f6 lh-title">
+
+  </section>
+  <footer class="mt5 pa3 bg-light-yellow shadow-2 mid-gray f6 lh-title">
+    <div class="w-100 center ph3" style="max-width: 50rem;">
       <div>
         click on an
         <span class="f5 f4-ns">
@@ -125,8 +128,7 @@
         <a href="/rss.xml" class="link dim underline-hover dark-green">[rss feed]</a>
         <a href="/refresh" class="link dim underline-hover dark-green">[refresh database]</a>
       </div>
-    </footer>
-
-  </section>
+    </div>
+  </footer>
 </body>
 </html>
