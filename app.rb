@@ -64,7 +64,7 @@ class App < Sinatra::Base
         )
       end
       {
-        rows: rows,
+        rows: rows.sort_by{|row| row.created}.reverse,
         title: title
       }
     end
